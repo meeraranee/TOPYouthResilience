@@ -1,47 +1,62 @@
-#
-# This is a Shiny web application. You can run the application by clicking
-# the 'Run App' button above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    http://shiny.rstudio.com/
-#
+# Youth Resilience in PR Shiny App
 
+# Import libraries
 library(shiny)
+library(shinythemes)
+library(dplyr)
 
-# Define UI for application that draws a histogram
-ui <- fluidPage(
+# Build app
+ui <- fluidPage(theme = shinytheme("darkly"),
 
     # Application title
-    titlePanel("Old Faithful Geyser Data"),
-
-    # Sidebar with a slider input for number of bins 
-    sidebarLayout(
-        sidebarPanel(
-            sliderInput("bins",
-                        "Number of bins:",
-                        min = 1,
-                        max = 50,
-                        value = 30)
+    titlePanel("Enhancing Children's Resilience to Adversity in Puerto Rico",
+               windowTitle = "Youth Resilience in PR"),
+    
+    # Tab 1
+        tabsetPanel(type = "pills", id = "tabselected",
+            tabPanel("Background Information", value = 1
+                    ),
+        
+    # Tab 2
+            tabPanel("Classroom Activities", value = 2
+                     ),
+        
+    
+    # Tab 3
+            tabPanel("Resources", value = 3
+                     ),
+    
+    # Tab 4
+            tabPanel("Data Sources", value = 4
+                    ),
+    ),
+    
+    mainPanel(
+        conditionalPanel(condition = "input.tabselected==1",
+                         htmlOutput("youthinfo")
         ),
-
-        # Show a plot of the generated distribution
-        mainPanel(
-           plotOutput("distPlot")
-        )
-    )
+        # conditionalPanel(condition = "input.tabselected==2"
+        # ),
+        # conditionalPanel(condition = "input.tabselected==3"
+        # ),
+        # conditionalPanel(condition = "input.tabselected==4"
+        # ),
+    ),
 )
 
-# Define server logic required to draw a histogram
+# Define server logic
 server <- function(input, output) {
-
-    output$distPlot <- renderPlot({
-        # generate bins based on input$bins from ui.R
-        x    <- faithful[, 2]
-        bins <- seq(min(x), max(x), length.out = input$bins + 1)
-
-        # draw the histogram with the specified number of bins
-        hist(x, breaks = bins, col = 'darkgray', border = 'white')
+    output$youthinfo <- renderUI ({
+        HTML(paste(
+            "", "<b><img src=https://www.youthdynamics.org/wp-content/uploads/2022/07/Drop-the-Labels-Kids-Shine-When-We-Focus-on-Strengths.png></b>", "",
+            "", "<b>What is the problem?</b>","",
+            "<i>Sample text:</i> Covid-19 and other disasters have highlighted critical
+            gaps in mental health care for children and youth in the US and PR. 
+            Advancing equity and promoting resilience in mental health for this
+            age demographic can help to strengthen the impact of disasters in
+            the community.",
+            sep = "<br/>"
+        ))
     })
 }
 
