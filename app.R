@@ -47,8 +47,9 @@ ui <- fluidPage(theme = shinytheme("darkly"),
                     # conditionalPanel(condition = "input.tabselected==2"
                     # ),
                     conditionalPanel(condition = "input.tabselected==3",
+                                     htmlOutput("prtitle"),
                                      leafletOutput("prmap"),
-                                     textOutput("prtitle")
+                                     htmlOutput("pronline")
                     ),
                     # conditionalPanel(condition = "input.tabselected==4"
                     # ),
@@ -70,7 +71,10 @@ server <- function(input, output) {
         ))
     })
     output$prtitle <- renderText({
-        "Map of Puerto Rico: In-Person Resource Locations"
+        paste("<h3><b>In-Person Resource Locations in PR</b></h3>")
+    })
+    output$pronline <- renderText({
+        paste("<h3><b>Online Resources</b></h3>")
     })
     output$prmap <- renderLeaflet({
         leaflet(pr) %>%
