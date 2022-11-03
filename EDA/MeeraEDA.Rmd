@@ -13,8 +13,32 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Kids Count Data Center EDA
 
-```{r cars}
-summary(cars)
+# Import libraries
+```{r}
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+```
+
+# Read df for Families with related children that are below poverty by family type in Puerto Rico
+```{r}
+df <- read.csv("~/Documents/TOP/Code/Data/FamilesChildrenBelowPL.csv")
+df
+```
+
+```{r}
+
+df %>%
+  select(FamilyType, Year, Number) %>%
+  group_by(Number) -> df1
+head(df1)
+
+ggplot(data = df1, mapping = aes(x = Year, y = (Number))) +
+  geom_point(mapping = aes(color = FamilyType)) +
+  geom_smooth() +
+  ggtitle("Families with Children Below Poverty Line in PR by Family Type") +
+  xlab("Year") +
+  ylab("Population")
 ```
 
 ## Including Plots

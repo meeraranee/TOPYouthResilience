@@ -18,16 +18,19 @@ ui <- fluidPage(theme = shinytheme("darkly"),
                     ),
         
     # Tab 2
-            tabPanel("Classroom Activities", value = 2
+            tabPanel("Tools", value = 2
                      ),
         
-    
     # Tab 3
             tabPanel("Resources", value = 3
-                     ),
+                    ),
     
     # Tab 4
-            tabPanel("Data Sources", value = 4
+            tabPanel("Classroom Activities", value = 4
+                     ),
+    
+    # Tab 5
+            tabPanel("Data Sources", value = 5
                     ),
     ),
     
