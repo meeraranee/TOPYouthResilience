@@ -3,48 +3,55 @@
 # Import libraries
 library(shiny)
 library(shinythemes)
+library(tidyverse)
 library(dplyr)
+library(leaflet)
+library(geojsonR)
+
+# PR map
+pr <- rgdal::readOGR("https://raw.githubusercontent.com/commonwealth-of-puerto-rico/crime-spotter/master/public/data/municipalities.geojson")
 
 # Build app
 ui <- fluidPage(theme = shinytheme("darkly"),
-
-    # Application title
-    titlePanel("Enhancing Children's Resilience to Adversity in Puerto Rico",
-               windowTitle = "Youth Resilience in PR"),
-    
-    # Tab 1
-        tabsetPanel(type = "pills", id = "tabselected",
-            tabPanel("Background Information", value = 1
+                
+                # Application title
+                titlePanel("Enhancing Children's Resilience to Adversity in Puerto Rico",
+                           windowTitle = "Youth Resilience in PR"),
+                
+                # Tab 1
+                tabsetPanel(type = "pills", id = "tabselected",
+                            tabPanel("Background Information", value = 1
+                            ),
+                            
+                            # Tab 2
+                            tabPanel("Tools", value = 2
+                            ),
+                            
+                            # Tab 3
+                            tabPanel("Resources", value = 3
+                            ),
+                            
+                            # Tab 4
+                            tabPanel("Classroom Activities", value = 4
+                            ),
+                            
+                            # Tab 5
+                            tabPanel("Data Sources", value = 5
+                            ),
+                ),
+                
+                mainPanel(
+                    conditionalPanel(condition = "input.tabselected==1",
+                                     htmlOutput("youthinfo")
                     ),
-        
-    # Tab 2
-            tabPanel("Tools", value = 2
-                     ),
-        
-    # Tab 3
-            tabPanel("Resources", value = 3
+                    # conditionalPanel(condition = "input.tabselected==2"
+                    # ),
+                    conditionalPanel(condition = "input.tabselected==3",
+                                     leafletOutput("prmap")
                     ),
-    
-    # Tab 4
-            tabPanel("Classroom Activities", value = 4
-                     ),
-    
-    # Tab 5
-            tabPanel("Data Sources", value = 5
-                    ),
-    ),
-    
-    mainPanel(
-        conditionalPanel(condition = "input.tabselected==1",
-                         htmlOutput("youthinfo")
-        ),
-        # conditionalPanel(condition = "input.tabselected==2"
-        # ),
-        # conditionalPanel(condition = "input.tabselected==3"
-        # ),
-        # conditionalPanel(condition = "input.tabselected==4"
-        # ),
-    ),
+                    # conditionalPanel(condition = "input.tabselected==4"
+                    # ),
+                ),
 )
 
 # Define server logic
@@ -60,6 +67,16 @@ server <- function(input, output) {
             the community.",
             sep = "<br/>"
         ))
+    })
+    output$prmap <- renderLeaflet({
+        leaflet(pr) %>%
+            addTiles() %>%
+            addPolygons(fillOpacity = .01,
+                        label = ~NAME,
+                        opacity = 1,
+                        weight = 1.5,
+                        highlightOptions = highlightOptions(color = "#FF0000",
+                                                            weight = 5))
     })
 }
 
