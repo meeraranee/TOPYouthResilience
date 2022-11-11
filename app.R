@@ -88,7 +88,6 @@ server <- function(input, output) {
             "<font size=1>Tech Team: Lindsay Beyak, Jonathan Hague, Meera Patel</font></br>",
             "<font size=1>Team Leaders: Dr. Maria Barouti, Dr. Richard Ressler</font>",
             sep = ""
-            # sep = "<br/>"
         ))
     })
     
