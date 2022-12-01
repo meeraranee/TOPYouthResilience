@@ -1,0 +1,117 @@
+---
+title: "JonathanEDA"
+author: "Jonathan Hague"
+date: "10/11/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Let's import our dataset:
+```{r}
+library(tidyverse)
+library(haven)
+
+##Data is obtained from the CDC's National Center for Health Statistics, National
+##Survey of the Diagnosis and Treatment of ADHD and Tourette Syndrome
+##The link to the data is https://www.cdc.gov/nchs/slaits/ns_data.htm 
+
+
+nsdata_adhd_puf_u <- read_sas("../EDA/nsdata_adhd_puf_u.sas7bdat")
+
+View(nsdata_adhd_puf_u )
+
+head(nsdata_adhd_puf_u)
+
+
+nsdata_adhd_puf_u %>%
+  select(ADHD_A1_4) %>%
+  arrange(desc(ADHD_A1_4))
+
+Concered <- table(nsdata_adhd_puf_u['ADHD_A1_4'])
+Concered <- as.data.frame(Concered)
+Concered$Var1 <- recode_factor(Concered$Var1, 
+                               "1" = "Family",
+                               "2" = "School",
+                               "3" = "Healthcare", 
+                               "4" = "Else",
+                               "6" = "DontKnow",
+                               "7" = "Refused")
+levels(Concered$Var1)
+
+###Pie
+Concered %>%
+  mutate(Party = as.character(Var1)) %>%
+  select(-Var1) -> Concered
+
+Prop <- c(1869, 917, 64, 93, 22, 1)
+
+pie(Prop, labels = c("Family", "School", "Healthcare",
+                     "Else", "DontKnow", "Refused"))
+#3dPie
+library(RColorBrewer)
+library(plotrix)
+myPalette <- brewer.pal(6, "Set2") 
+pie3D(Prop, labels = c("Family", "School", "Healthcare",
+                       "Else", "DontKnow", "Refused"),
+      explode=0.1,
+      border="white",
+      col=myPalette,
+      main="Concern for Child Behavior Prior to ADHD Diagnostic")
+###Histo
+hist(nsdata_adhd_puf_u$ADHD_A1_4,
+     main="Concern for Child Behavior Prior to ADHD Diagnostic",
+     xlab="Concerned Party",
+     freq=TRUE)
+```
+
+
+
+ADHD_A1_4 
+```{r}
+#interactive pie
+library(highcharter) 
+options(highcharter.theme = hc_theme_smpl(tooltip = list(valueDecimals = 2)))
+
+df <- data.frame(
+  x = c(0, 1, 2, 3, 4, 5),
+  y = c(1869, 917, 64, 93, 22, 1),
+  name = as.factor(c("Family", "School", "Healthcare",
+                     "Else", "DontKnow", "RefusedAnswer"))
+)
+df
+
+hc <- df %>%
+  hchart(
+    "pie", hcaes(x = name, y = y),
+    name = "Responded") %>%
+  hc_title(
+    text = "Who was FIRST person who was concerned with child’s behavior, attention, or performance before ADHD diagnosis?<i> SLAITS CDC 2,966 Respondent</i>",
+    margin = 20,
+    align = "left",
+    style = list(color = "#22A884", useHTML = TRUE))
+
+hc
+
+
+```
+ADHD_A1_4_AGE
+How old was the child when that person was first concerned with his/her behavior, attention, or performance?
+
+```{r}
+
+hist(nsdata_adhd_puf_u$ADHD_A1_4_AGE_STD,
+     main="Concern for Child Behavior Prior to ADHD Diagnostic",
+     xlab="Concerned Party",
+     freq=TRUE)
+```
+
+
+
+```{r}
+
+
+
+```
