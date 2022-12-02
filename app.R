@@ -63,8 +63,9 @@ ui <- fluidPage(theme = shinytheme("darkly"),
                                    leafletOutput("prmap"),
                                    htmlOutput("pronline")
                   ),
-                  # conditionalPanel(condition = "input.tabselected==5"
-                  # ),
+                  conditionalPanel(condition = "input.tabselected==5",
+                                   htmlOutput("mindful")
+                  ),
                   conditionalPanel(condition = "input.tabselected==6",
                                    htmlOutput("datasources")
                   )),
@@ -104,7 +105,12 @@ server <- function(input, output) {
     # the function's result will be finally send to the Output
   })
   
-  # Resources tab
+  # Classroom Activities Tab
+  output$mindful <- renderText({
+    includeHTML("mindful.html")
+  })
+  
+  # Resources Tab
   output$prtitle <- renderText({
     paste("<h3><b>In-Person Resource Locations in PR</b></h3>")
   })
