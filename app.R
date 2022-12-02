@@ -6,11 +6,101 @@ library(shinythemes)
 library(tidyverse)
 library(leaflet)
 library(geojsonR)
+library(haven)
+library(RColorBrewer)
+library(plotrix)
+library(highcharter) 
+library(hrbrthemes)
 
 # PR map
 pr <- rgdal::readOGR("https://raw.githubusercontent.com/commonwealth-of-puerto-rico/crime-spotter/master/public/data/municipalities.geojson")
 mapdf <- read_csv("mapdf1.csv")
+# Business - Viz : hc, p, 
+nsdata_adhd_puf_u <- read_sas("./EDA/nsdata_adhd_puf_u.sas7bdat")
+Concered <- table(nsdata_adhd_puf_u['ADHD_A1_4'])
+Concered <- as.data.frame(Concered)
+Concered$Var1 <- recode_factor(Concered$Var1, 
+                               "1" = "Family",
+                               "2" = "School",
+                               "3" = "Healthcare", 
+                               "4" = "Else",
+                               "6" = "DontKnow",
+                               "7" = "Refused")
 
+df <- data.frame(
+  x = c(0, 1, 2, 3, 4, 5),
+  y = c(1869, 917, 64, 93, 22, 1),
+  name = as.factor(c("Family", "School", "Healthcare",
+                     "Else", "DontKnow", "RefusedAnswer"))
+)
+
+hc <- df %>%
+  hchart(
+    "pie", hcaes(x = name, y = y),
+    name = "Responded") %>%
+  hc_title(
+    text = "The First Person Concerned With The Child’s Behavior, Attention, or Performance Before ADHD Diagnosis.",
+    margin = 20,
+    align = "left",
+    style = list(color = "black", useHTML = TRUE))
+
+
+Age_First_Concerned <- as.data.frame(nsdata_adhd_puf_u$ADHD_A1_4_AGE_STD) #2,966 input
+Age_First_Concerned %>% 
+  rename(Age_Concerned = 'nsdata_adhd_puf_u$ADHD_A1_4_AGE_STD') %>%
+  filter(Age_Concerned != 96) %>% 
+  filter(Age_Concerned != 97) -> Age_First_Concerned #2,942 input
+
+p <- Age_First_Concerned %>%
+  filter(Age_Concerned > 0) %>%
+  ggplot( aes(x=Age_Concerned)) +
+  geom_histogram( binwidth=1, fill="#69b3a2", color="#e9ecef", alpha=0.9) +
+  xlab("Child's Age") +
+  ggtitle("Child's Age When The First Person Concerned With Their Behavior Was First Concerned") +
+  theme_ipsum() +
+  theme(plot.title = element_text(size=15), 
+        text=element_text(color="black"), 
+        axis.text=element_text(color="black")) 
+
+
+df2 <- data.frame(
+  x1 = c(1, 2, 3, 4, 5, 6),
+  y1 = c(1752, 549, 189, 5, 383, 88),
+  name = as.factor(c("Has ADHD & Taking ADHD Med", "Has ADHD & Not Taking ADHD Med", 
+                     "Has ADHD & Never Taken ADHD Med", "Has ADHD & Med Unknown",
+                     "Does Not Currently Have ADHD", "Current ADHD Status Unknown"))
+)
+
+hc2 <- df2 %>%
+  hchart(
+    "pie", hcaes(x = name, y = y1),
+    name = "Responded") %>%
+  hc_title(
+    text = " ADHD Condition and Medication Status",
+    margin = 20,
+    align = "left",
+    style = list(color = "black", useHTML = TRUE))
+hc2
+
+
+df3 <- data.frame(
+  x2 = c(1, 2, 3, 4, 5, 6),
+  y2 = c(633, 640, 853, 514, 247, 79),
+  name = as.factor(c("Problematic", "Somewhat Problematic", 
+                     "Average", "Above Average",
+                     "Excellent", "Don't Know or Refused"))
+)
+
+hc3 <- df3 %>%
+  hchart(
+    "pie", hcaes(x = name, y = y2),
+    name = "Responded") %>%
+  hc_title(
+    text = " ADHD and School Performance",
+    margin = 20,
+    align = "left",
+    style = list(color = "black", useHTML = TRUE))
+hc3
 
 # Build app
 ui <- fluidPage(theme = shinytheme("darkly"),
@@ -29,8 +119,100 @@ ui <- fluidPage(theme = shinytheme("darkly"),
                             ),
                             
                             # Tab 3
-                            tabPanel("Visualizations", value = 3
-                            ),
+                            tabPanel("Visualization", value = 3,
+                                     fluidPage(
+                                               tabsetPanel(
+                                                tabPanel(title = "Why, What, and Who?",
+                                                            img(id= "homeing", src="https://inspirecommunityoutreach.ca/wp-content/uploads/2022/02/inspire-adhd.jpg", style = "width: 70%; height= 70% ; padding: 0;"),
+                                                            column(10,
+                                                                   class="homeing",
+                                                                   h2("What do the numbers say?"),
+                                                                   br(),
+                                                                   h4(" In this section we are looking at data from the CDC's National Survey of the Diagnosis and Treatment of ADHD and Tourette Syndrome (NS-DATA) to derive some insigntful visuals to help you better understand ADHD in children in the US."),
+                                                                   br(),
+                                                                   HTML("<p>If you would like to check the survey data, please go to <a href='https://www.cdc.gov/nchs/slaits/ns_data.htm'> this CDC link</a>!</p>"),
+                                                                   br(),
+                                                                   h4("Presented charts reflect responses from the survey data about children aged 2 to 15 years old in 2011-2012 who had ever been diagnosed with attention-deficit/hyperactivity disorder (ADHD)."),
+                                                                   br(),
+                                                                   h4("The survey is based on a national sampling of around 3,000 respondent parent of caregiver of a child with ADHD."),
+                                                                   br()
+                                                              )
+                                                            ),
+                                                tabPanel("Diagnosis",
+                                                          fluidPage(
+                                                              mainPanel(
+                                                                highchartOutput("plotgraph1", height="500px")
+                                                                #splitLayout(cellWidths = c("50%", "50%"), highchartOutput("plotgraph1", height="500px"), plotOutput("plotgraph2"))
+                                                                #splitLayout(cellWidths = c("50%", "50%"), plotOutput("plotgraph1"), plotOutput("plotgraph2"))
+                                                                        #column(8, plotOutput("plotgraph1")),
+                                                                        #column(8, plotOutput("plotgraph2"))
+                                                                      )
+                                                            #plotOutput("plotgraph1"), plotOutput("plotgraph2")
+                                                                #splitLayout(cellWidths = c("50%", "50%"), plotOutput("plotgraph1"), plotOutput("plotgraph2"))
+                                                            )
+                                                        ),
+                                                tabPanel("Age",
+                                                         fluidPage(
+                                                           mainPanel(
+                                                             plotOutput("plotgraph2")
+                                                            )
+                                                           )
+                                                        #  sidebarLayout(
+                                                        #    sidebarPanel(
+                                                        #      selectInput("state_in", "State?", choices = unique(nsdata_adhd_puf_u$ADHD_A1_4), selected = "1", multiple = TRUE),
+                                                        #      checkboxInput("facetcounty", "Facet by County?"),
+                                                        #      varSelectInput("EDAx", "Variable", data = nsdata_adhd_puf_u, selected = "ADHD_A1_4"),
+                                                        #      numericInput("nullVal", "Please Enter a Positive Integer", value = 0)
+                                                        #    ),
+                                                        #    mainPanel(
+                                                        #      plotOutput("distPlot"),
+                                                        #      verbatimTextOutput("t_test"),
+                                                        #      verbatimTextOutput("noNull"))
+                                                        #    )
+                                                        ),
+                                                tabPanel("Medication Status",
+                                                         fluidPage(
+                                                           mainPanel(
+                                                             highchartOutput("plotgraph3")
+                                                           )
+                                                         )
+                                                          #sidebarLayout(
+                                                          #  sidebarPanel(
+                                                          #    selectInput("state_in", "State?", choices = unique(nsdata_adhd_puf_u$ADHD_A1_4), selected = "1", multiple = TRUE),
+                                                          #    checkboxInput("facetcounty", "Facet by County?"),
+                                                          #    varSelectInput("EDAx", "Variable", data = nsdata_adhd_puf_u, selected = "ADHD_A1_4"),
+                                                          #    numericInput("nullVal", "Please Enter a Positive Integer", value = 0)
+                                                          #  ),
+                                                          #  mainPanel(
+                                                          #    plotOutput("distPlot"),
+                                                          #    verbatimTextOutput("t_test"),
+                                                          #    verbatimTextOutput("noNull"))
+                                                          #)
+                                                        ),
+                                                tabPanel("Impact",
+                                                         fluidPage(
+                                                           mainPanel(
+                                                             highchartOutput("plotgraph4")
+                                                           )
+                                                         )
+                                                          #sidebarLayout(
+                                                          #  sidebarPanel(
+                                                          #    selectInput("state_in", "State?", choices = unique(nsdata_adhd_puf_u$ADHD_A1_4), selected = "1", multiple = TRUE),
+                                                          #    checkboxInput("facetcounty", "Facet by County?"),
+                                                          #    varSelectInput("EDAx", "Variable", data = nsdata_adhd_puf_u, selected = "ADHD_A1_4"),
+                                                          #    numericInput("nullVal", "Please Enter a Positive Integer", value = 0)
+                                                          #  ),
+                                                          #  mainPanel(
+                                                          #    plotOutput("distPlot"),
+                                                          #    verbatimTextOutput("t_test"),
+                                                          #    verbatimTextOutput("noNull"))
+                                                          #)
+                                                        #)
+                                                    #)
+                                               )
+                                     )
+                                     )
+                                     ),
                             
                             # Tab 4
                             tabPanel("Resources", value = 4
@@ -42,7 +224,7 @@ ui <- fluidPage(theme = shinytheme("darkly"),
                             
                             # Tab 6
                             tabPanel("Data Sources", value = 6
-                            ),
+                            )
                 ),
                 
                 mainPanel(
@@ -110,7 +292,67 @@ server <- function(input, output) {
     includeHTML("mindful.html")
   })
   
-  # Resources Tab
+  #Viz tab
+  output$plotgraph1 <- renderHighchart({
+    hc <- df %>%
+      hchart(
+        "pie", hcaes(x = name, y = y),
+        name = "Responded") %>%
+      hc_title(
+        text = "The First Person Concerned With The Child’s Behavior, Attention, or Performance Before ADHD Diagnosis.",
+        margin = 20,
+        align = "left",
+        style = list(color = "white", useHTML = TRUE))
+    
+    hchart(diamonds$carat)
+    hc
+  })
+  
+  output$plotgraph2 <- renderPlot({p})
+  
+  output$plotgraph3 <- renderHighchart({
+    df2 <- data.frame(
+      x1 = c(1, 2, 3, 4, 5, 6),
+      y1 = c(1752, 549, 189, 5, 383, 88),
+      name = as.factor(c("Has ADHD & Taking ADHD Med", "Has ADHD & Not Taking ADHD Med", 
+                         "Has ADHD & Never Taken ADHD Med", "Has ADHD & Med Unknown",
+                         "Does Not Currently Have ADHD", "Current ADHD Status Unknown"))
+    )
+    
+    hc2 <- df2 %>%
+      hchart(
+        "pie", hcaes(x = name, y = y1),
+        name = "Responded") %>%
+      hc_title(
+        text = "ADHD Condition and Medication Status",
+        margin = 20,
+        align = "left",
+        style = list(color = "white", useHTML = TRUE))
+    hc2
+  })
+  
+  output$plotgraph4 <- renderHighchart({
+    df3 <- data.frame(
+      x2 = c(1, 2, 3, 4, 5, 6),
+      y2 = c(633, 640, 853, 514, 247, 79),
+      name = as.factor(c("Problematic", "Somewhat Problematic", 
+                         "Average", "Above Average",
+                         "Excellent", "Don't Know or Refused"))
+    )
+    
+    hc3 <- df3 %>%
+      hchart(
+        "pie", hcaes(x = name, y = y2),
+        name = "Responded") %>%
+      hc_title(
+        text = " ADHD and School Performance",
+        margin = 20,
+        align = "left",
+        style = list(color = "white", useHTML = TRUE))
+    hc3
+  })
+  
+  # Resources tab
   output$prtitle <- renderText({
     paste("<h3><b>In-Person Resource Locations in PR</b></h3>")
   })

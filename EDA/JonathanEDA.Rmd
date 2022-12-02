@@ -1,0 +1,187 @@
+---
+title: "JonathanEDA"
+author: "Jonathan Hague"
+date: "10/11/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Let's import our dataset:
+```{r}
+library(tidyverse)
+library(haven)
+
+##Data is obtained from the CDC's National Center for Health Statistics, National
+##Survey of the Diagnosis and Treatment of ADHD and Tourette Syndrome
+##The link to the data is https://www.cdc.gov/nchs/slaits/ns_data.htm 
+
+
+nsdata_adhd_puf_u <- read_sas("../EDA/nsdata_adhd_puf_u.sas7bdat")
+
+View(nsdata_adhd_puf_u )
+
+head(nsdata_adhd_puf_u)
+
+
+nsdata_adhd_puf_u %>%
+  select(ADHD_A1_4) %>%
+  arrange(desc(ADHD_A1_4))
+
+Concered <- table(nsdata_adhd_puf_u['ADHD_A1_4'])
+Concered <- as.data.frame(Concered)
+Concered$Var1 <- recode_factor(Concered$Var1, 
+                               "1" = "Family",
+                               "2" = "School",
+                               "3" = "Healthcare", 
+                               "4" = "Else",
+                               "6" = "DontKnow",
+                               "7" = "Refused")
+levels(Concered$Var1)
+
+###Pie
+Concered %>%
+  mutate(Party = as.character(Var1)) %>%
+  select(-Var1) -> Concered
+
+Prop <- c(1869, 917, 64, 93, 22, 1)
+
+pie(Prop, labels = c("Family", "School", "Healthcare",
+                     "Else", "DontKnow", "Refused"))
+#3dPie
+library(RColorBrewer)
+library(plotrix)
+myPalette <- brewer.pal(6, "Set2") 
+pie3D(Prop, labels = c("Family", "School", "Healthcare",
+                       "Else", "DontKnow", "Refused"),
+      explode=0.1,
+      border="white",
+      col=myPalette,
+      main="Concern for Child Behavior Prior to ADHD Diagnostic")
+###Histo
+hist(nsdata_adhd_puf_u$ADHD_A1_4,
+     main="Concern for Child Behavior Prior to ADHD Diagnostic",
+     xlab="Concerned Party",
+     freq=TRUE)
+```
+
+
+Start Here: SLAITS CDC 2,966 Respondents
+----------
+
+ADHD_A1_4 
+```{r}
+#interactive pie
+library(highcharter) 
+options(highcharter.theme = hc_theme_smpl(tooltip = list(valueDecimals = 2)))
+
+df <- data.frame(
+  x = c(0, 1, 2, 3, 4, 5),
+  y = c(1869, 917, 64, 93, 22, 1),
+  name = as.factor(c("Family", "School", "Healthcare",
+                     "Else", "DontKnow", "RefusedAnswer"))
+)
+df
+
+hc <- df %>%
+  hchart(
+    "pie", hcaes(x = name, y = y),
+    name = "Responded") %>%
+  hc_title(
+    text = "The First Person Concerned With The Child’s Behavior, Attention, or Performance Before ADHD Diagnosis.",
+    margin = 20,
+    align = "left",
+    style = list(color = "black", useHTML = TRUE))
+
+hc
+```
+
+
+ADHD_A1_4_AGE_STD
+How old was the child when that person was first concerned with his/her behavior, attention, or performance?
+
+```{r}
+library(hrbrthemes)
+
+hist(nsdata_adhd_puf_u$ADHD_A1_4_AGE_STD,
+     main="Child's Age When Behavior Was First Concerning",
+     xlab="Child's Age",
+     freq=FALSE,
+      col = 'skyblue3', breaks = 5)
+
+Age_First_Concerned <- as.data.frame(nsdata_adhd_puf_u$ADHD_A1_4_AGE_STD) #2,966 input
+
+Age_First_Concerned %>% 
+  rename(Age_Concerned = 'nsdata_adhd_puf_u$ADHD_A1_4_AGE_STD') %>%
+  filter(Age_Concerned != 96) %>% 
+  filter(Age_Concerned != 97) -> Age_First_Concerned #2,942 input
+
+
+Age_First_Concerned %>%
+  ggplot() +
+  geom_histogram(aes(x=Age_Concerned))
+
+p <- Age_First_Concerned %>%
+  filter(Age_Concerned > 0) %>%
+  ggplot( aes(x=Age_Concerned)) +
+  geom_histogram( binwidth=1, fill="#69b3a2", color="#e9ecef", alpha=0.9) +
+  xlab("Child's Age") +
+  ggtitle("Child's Age When The First Person Concerned With Their Behavior Was First Concerned") +
+  theme_ipsum() +
+  theme(plot.title = element_text(size=10), 
+        text=element_text(color="black"), 
+        axis.text=element_text(color="black")) 
+p
+```
+ADHD_C1_3 Treatment 
+```{r}
+df2 <- data.frame(
+  x1 = c(1, 2, 3, 4, 5, 6),
+  y1 = c(1752, 549, 189, 5, 383, 88),
+  name = as.factor(c("Has ADHD & Taking ADHD Med", "Has ADHD & Not Taking ADHD Med", 
+                     "Has ADHD & Never Taken ADHD Med", "Has ADHD & Med Unknown",
+                     "Does Not Currently Have ADHD", "Current ADHD Status Unknown"))
+)
+
+hc2 <- df2 %>%
+  hchart(
+    "pie", hcaes(x = name, y = y1),
+    name = "Responded") %>%
+  hc_title(
+    text = " ADHD Condition and Medication Status",
+    margin = 20,
+    align = "left",
+    style = list(color = "black", useHTML = TRUE))
+hc2
+```
+
+
+ADHD_D2A_1 SYMPTOMS AND PERFORMANCE/IMPAIRMENT
+```{r}
+df3 <- data.frame(
+  x2 = c(1, 2, 3, 4, 5, 6),
+  y2 = c(633, 640, 853, 514, 247, 79),
+  name = as.factor(c("Problematic", "Somewhat Problematic", 
+                     "Average", "Above Average",
+                     "Excellent", "Don't Know or Refused"))
+)
+
+hc3 <- df3 %>%
+  hchart(
+    "pie", hcaes(x = name, y = y2),
+    name = "Responded") %>%
+  hc_title(
+    text = " ADHD and School Performance",
+    margin = 20,
+    align = "left",
+    style = list(color = "black", useHTML = TRUE))
+hc3
+
+
+```
+
+
+
+
