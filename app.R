@@ -65,7 +65,9 @@ ui <- fluidPage(theme = shinytheme("darkly"),
                   ),
                   # conditionalPanel(condition = "input.tabselected==5"
                   # ),
-                ),
+                  conditionalPanel(condition = "input.tabselected==6",
+                                   htmlOutput("datasources")
+                  )),
 )
 
 # Define server logic
@@ -125,6 +127,11 @@ server <- function(input, output) {
         lat = ~Lat,
         popup = ~Link
       )
+  })
+  
+  # Data Sources Tab
+  output$datasources <- renderText({
+    includeHTML("datasources.html")
   })
 }
 
