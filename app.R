@@ -118,7 +118,7 @@ hc3 <- df3 %>%
 hc3
 
 # Build app
-ui <- fluidPage(theme = shinytheme("cerulean"),
+ui <- fluidPage(theme = shinytheme("darkly"),
                 
                 # Application title
                 titlePanel("Enhancing Children's Resilience to Adversity in Puerto Rico",
@@ -144,6 +144,8 @@ ui <- fluidPage(theme = shinytheme("cerulean"),
                                                                    h2("What do the numbers say?"),
                                                                    br(),
                                                                    h4(" In this section we are looking at data from the CDC's National Survey of the Diagnosis and Treatment of ADHD and Tourette Syndrome (NS-DATA) to derive some insigntful visuals to help you better understand ADHD in children in the US."),
+                                                                   br(),
+                                                                   HTML("<p>If you would like to check the survey data, please go to <a href='https://www.cdc.gov/nchs/slaits/ns_data.htm'> this CDC link</a>!</p>"),
                                                                    br(),
                                                                    h4("Presented charts reflect responses from the survey data about children aged 2 to 15 years old in 2011-2012 who had ever been diagnosed with attention-deficit/hyperactivity disorder (ADHD)."),
                                                                    br(),
@@ -306,7 +308,7 @@ server <- function(input, output) {
         text = "The First Person Concerned With The Child’s Behavior, Attention, or Performance Before ADHD Diagnosis.",
         margin = 20,
         align = "left",
-        style = list(color = "black", useHTML = TRUE))
+        style = list(color = "white", useHTML = TRUE))
     
     hchart(diamonds$carat)
     hc
@@ -331,7 +333,7 @@ server <- function(input, output) {
         text = "ADHD Condition and Medication Status",
         margin = 20,
         align = "left",
-        style = list(color = "black", useHTML = TRUE))
+        style = list(color = "white", useHTML = TRUE))
     hc2
   })
   
@@ -352,7 +354,7 @@ server <- function(input, output) {
         text = " ADHD and School Performance",
         margin = 20,
         align = "left",
-        style = list(color = "black", useHTML = TRUE))
+        style = list(color = "white", useHTML = TRUE))
     hc3
   })
   
