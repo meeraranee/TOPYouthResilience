@@ -88,7 +88,7 @@ server <- function(input, output) {
   
   Identifier =function(q.c){  # Your function (could be also set outside of shiny body)
     if (q.c == "Fearful"){
-      QuizResult="Traumatice Experience"
+      QuizResult="Traumatic Experience"
     } else if (q.c == "Difficulty sustaining attention") {
       QuizResult="ADHD"
     } else if (q.c == "Restless"){
