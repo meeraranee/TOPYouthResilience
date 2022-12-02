@@ -68,7 +68,7 @@ hist(nsdata_adhd_puf_u$ADHD_A1_4,
 ```
 
 
-Start Here:
+Start Here: SLAITS CDC 2,966 Respondents
 ----------
 
 ADHD_A1_4 
@@ -90,7 +90,7 @@ hc <- df %>%
     "pie", hcaes(x = name, y = y),
     name = "Responded") %>%
   hc_title(
-    text = "The First Person Concerned With The Child’s Behavior, Attention, or Performance Before ADHD Diagnosis.<i> \n SLAITS CDC 2,966 Respondent</i>",
+    text = "The First Person Concerned With The Child’s Behavior, Attention, or Performance Before ADHD Diagnosis.",
     margin = 20,
     align = "left",
     style = list(color = "black", useHTML = TRUE))
@@ -135,11 +135,53 @@ p <- Age_First_Concerned %>%
         axis.text=element_text(color="black")) 
 p
 ```
-
-
-
+ADHD_C1_3 Treatment 
 ```{r}
+df2 <- data.frame(
+  x1 = c(1, 2, 3, 4, 5, 6),
+  y1 = c(1752, 549, 189, 5, 383, 88),
+  name = as.factor(c("Has ADHD & Taking ADHD Med", "Has ADHD & Not Taking ADHD Med", 
+                     "Has ADHD & Never Taken ADHD Med", "Has ADHD & Med Unknown",
+                     "Does Not Currently Have ADHD", "Current ADHD Status Unknown"))
+)
 
+hc2 <- df2 %>%
+  hchart(
+    "pie", hcaes(x = name, y = y1),
+    name = "Responded") %>%
+  hc_title(
+    text = " ADHD Condition and Medication Status",
+    margin = 20,
+    align = "left",
+    style = list(color = "black", useHTML = TRUE))
+hc2
+```
+
+
+ADHD_D2A_1 SYMPTOMS AND PERFORMANCE/IMPAIRMENT
+```{r}
+df3 <- data.frame(
+  x2 = c(1, 2, 3, 4, 5, 6),
+  y2 = c(633, 640, 853, 514, 247, 79),
+  name = as.factor(c("Problematic", "Somewhat Problematic", 
+                     "Average", "Above Average",
+                     "Excellent", "Don't Know or Refused"))
+)
+
+hc3 <- df3 %>%
+  hchart(
+    "pie", hcaes(x = name, y = y2),
+    name = "Responded") %>%
+  hc_title(
+    text = " ADHD and School Performance",
+    margin = 20,
+    align = "left",
+    style = list(color = "black", useHTML = TRUE))
+hc3
 
 
 ```
+
+
+
+
