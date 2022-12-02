@@ -49,8 +49,13 @@ ui <- fluidPage(theme = shinytheme("darkly"),
                   conditionalPanel(condition = "input.tabselected==1",
                                    htmlOutput("youthinfo")
                   ),
-                  # conditionalPanel(condition = "input.tabselected==2"
-                  # ),
+                  conditionalPanel(condition = "input.tabselected==2",
+                                   htmlOutput("explanation"),
+                                   selectInput("UserInput",  # This is the name of the variable the User Input will be saved to
+                                               "1.	In the last two weeks, have you witnessed the following child’s behavior?", #This is what will be displayed for the user
+                                               choices = c("","Fearful", "Difficulty sustaining attention", "Restless","None of these")), # the preset choices
+                                   h4(textOutput("Result")) # h4 is text size again; here will be the Output send to 
+                  ),
                   # conditionalPanel(condition = "input.tabselected==3"
                   # ),
                   conditionalPanel(condition = "input.tabselected==4",
@@ -67,6 +72,34 @@ ui <- fluidPage(theme = shinytheme("darkly"),
 server <- function(input, output) {
   output$youthinfo <- renderUI({
     includeHTML("backgroundinfo.html")
+  })
+  
+  # Survey Tab
+  output$explanation <- renderText({
+    paste("<h4>This tool will help you identify some potential conditions the
+           child may be experiencing. Select the answer that best describes your
+           observations</h4>", "",
+          "<h5>*Please note the results identified in this survey are not a diagnosis
+          and a professional consultation is encouraged.*</h5>", "")#h2 comes form html style and simply is determining basically the text size")
+  })
+  
+  Identifier =function(q.c){  # Your function (could be also set outside of shiny body)
+    if (q.c == "Fearful"){
+      QuizResult="Traumatice Experience"
+    } else if (q.c == "Difficulty sustaining attention") {
+      QuizResult="ADHD"
+    } else if (q.c == "Restless"){
+      QuizResult="Overlap"
+    } else if(q.c == "None of these"){
+      QuizResult="More information needed"
+    }else{
+      QuizResult=""
+    }
+    return(QuizResult)
+  }
+  output$Result <- renderText({  #render is observing any change of the input
+    Identifier(input$UserInput) # is taken users, handing over to the function
+    # the function's result will be finally send to the Output
   })
   
   # Resources tab
