@@ -16,7 +16,7 @@ mapdf <- read_csv("mapdf1.csv")
 ui <- fluidPage(theme = shinytheme("darkly"),
                 
                 # Application title
-                titlePanel("Enhancing Children's Resilience to Adversity in Puerto Rico",
+                titlePanel("SunnyR: A PR Youth Mental Health Dashboard",
                            windowTitle = "Youth Resilience in PR"),
                 
                 # Tab 1
