@@ -119,7 +119,7 @@ ui <- fluidPage(theme = shinytheme("darkly"),
                             ),
                             
                             # Tab 3
-                            tabPanel("Visualization", value = 3,
+                            tabPanel("Visualizations", value = 3,
                                      fluidPage(
                                                tabsetPanel(
                                                 tabPanel(title = "Why, What, and Who?",
