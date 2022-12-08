@@ -14,9 +14,9 @@ library(hrbrthemes)
 
 # PR map
 pr <- rgdal::readOGR("https://raw.githubusercontent.com/commonwealth-of-puerto-rico/crime-spotter/master/public/data/municipalities.geojson")
-mapdf <- read_csv("mapdf1.csv")
+mapdf <- read_csv("Data/mapdf1.csv")
 # Business - Viz : hc, p, 
-nsdata_adhd_puf_u <- read_sas("./Data/nsdata_adhd_puf_u.sas7bdat")
+nsdata_adhd_puf_u <- read_sas("Data/nsdata_adhd_puf_u.sas7bdat")
 Concered <- table(nsdata_adhd_puf_u['ADHD_A1_4'])
 Concered <- as.data.frame(Concered)
 Concered$Var1 <- recode_factor(Concered$Var1, 
@@ -103,7 +103,7 @@ hc3 <- df3 %>%
 hc3
 
 # Build app
-ui <- fluidPage(theme = shinytheme("darkly"),
+ui <- fluidPage(theme = shinytheme("yeti"),
                 
                 # Application title
                 titlePanel("SunnyR: A Mental Health Dashboard for Youth in PR",
@@ -128,7 +128,7 @@ ui <- fluidPage(theme = shinytheme("darkly"),
                                                                    class="homeing",
                                                                    h2("What do the numbers say?"),
                                                                    br(),
-                                                                   h4(" In this section we are looking at data from the CDC's National Survey of the Diagnosis and Treatment of ADHD and Tourette Syndrome (NS-DATA) to derive some insightful visuals to help you better understand ADHD in children in the US."),
+                                                                   h4(" In this section we are looking at data from the CDC's National Survey of the Diagnosis and Treatment of ADHD and Tourette Syndrome (NS-DATA) to derive some insigntful visuals to help you better understand ADHD in children in the US."),
                                                                    br(),
                                                                    HTML("<p>If you would like to check the survey data, please go to <a href='https://www.cdc.gov/nchs/slaits/ns_data.htm'> this CDC link</a>!</p>"),
                                                                    br(),
@@ -256,7 +256,7 @@ ui <- fluidPage(theme = shinytheme("darkly"),
 # Define server logic
 server <- function(input, output) {
   output$youthinfo <- renderUI({
-    includeHTML("./Data/Text/backgroundinfo.html")
+    includeHTML("Text/backgroundinfo.html")
   })
   
   # Survey Tab
@@ -289,9 +289,9 @@ server <- function(input, output) {
   
   # Classroom Activities Tab
   output$mindful <- renderText({
-    includeHTML("./Data/Text/mindful.html")
+    includeHTML("Text/mindful.html")
   })
-
+  
   #Viz tab
   output$plotgraph1 <- renderHighchart({
     hc <- df %>%
@@ -357,7 +357,7 @@ server <- function(input, output) {
     paste("<h3><b>In-Person Resource Locations in PR</b></h3>")
   })
   output$pronline <- renderUI({
-    includeHTML("./Data/Text/onlineresources.html")
+    includeHTML("Text/onlineresources.html")
   })
   output$prmap <- renderLeaflet({
     leaflet(pr) %>%
@@ -379,7 +379,7 @@ server <- function(input, output) {
   
   # Data Sources Tab
   output$datasources <- renderText({
-    includeHTML("./Data/Text/datasources.html")
+    includeHTML("Text/datasources.html")
   })
 }
 
