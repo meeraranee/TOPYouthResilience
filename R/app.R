@@ -16,7 +16,7 @@ library(hrbrthemes)
 pr <- rgdal::readOGR("https://raw.githubusercontent.com/commonwealth-of-puerto-rico/crime-spotter/master/public/data/municipalities.geojson")
 mapdf <- read_csv("mapdf1.csv")
 # Business - Viz : hc, p, 
-nsdata_adhd_puf_u <- read_sas("./EDA/nsdata_adhd_puf_u.sas7bdat")
+nsdata_adhd_puf_u <- read_sas("./Data/nsdata_adhd_puf_u.sas7bdat")
 Concered <- table(nsdata_adhd_puf_u['ADHD_A1_4'])
 Concered <- as.data.frame(Concered)
 Concered$Var1 <- recode_factor(Concered$Var1, 
@@ -256,7 +256,7 @@ ui <- fluidPage(theme = shinytheme("darkly"),
 # Define server logic
 server <- function(input, output) {
   output$youthinfo <- renderUI({
-    includeHTML("backgroundinfo.html")
+    includeHTML("./Data/Text/backgroundinfo.html")
   })
   
   # Survey Tab
@@ -289,9 +289,9 @@ server <- function(input, output) {
   
   # Classroom Activities Tab
   output$mindful <- renderText({
-    includeHTML("mindful.html")
+    includeHTML("./Data/Text/mindful.html")
   })
-  
+
   #Viz tab
   output$plotgraph1 <- renderHighchart({
     hc <- df %>%
@@ -357,7 +357,7 @@ server <- function(input, output) {
     paste("<h3><b>In-Person Resource Locations in PR</b></h3>")
   })
   output$pronline <- renderUI({
-    includeHTML("onlineresources.html")
+    includeHTML("./Data/Text/onlineresources.html")
   })
   output$prmap <- renderLeaflet({
     leaflet(pr) %>%
@@ -379,7 +379,7 @@ server <- function(input, output) {
   
   # Data Sources Tab
   output$datasources <- renderText({
-    includeHTML("datasources.html")
+    includeHTML("./Data/Text/datasources.html")
   })
 }
 
