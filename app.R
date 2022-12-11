@@ -243,6 +243,7 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                   conditionalPanel(condition = "input.tabselected==4",
                                    htmlOutput("prtitle"),
                                    leafletOutput("prmap"),
+                                   htmlOutput("prcaveat"),
                                    htmlOutput("pronline")
                   ),
                   conditionalPanel(condition = "input.tabselected==5",
@@ -375,6 +376,9 @@ server <- function(input, output) {
         lat = ~Lat,
         popup = ~Link
       )
+  })
+  output$prcaveat <- renderText({
+    paste("*These facilities also offer Telehealth help.*")
   })
   
   # Data Sources Tab
