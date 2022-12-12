@@ -11,6 +11,7 @@ library(RColorBrewer)
 library(plotrix)
 library(highcharter) 
 library(hrbrthemes)
+library(rsconnect)
 
 # PR map
 pr <- rgdal::readOGR("https://raw.githubusercontent.com/commonwealth-of-puerto-rico/crime-spotter/master/public/data/municipalities.geojson")
