@@ -122,98 +122,98 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                             # Tab 3
                             tabPanel("Visualizations", value = 3,
                                      fluidPage(
-                                               tabsetPanel(
-                                                tabPanel(title = "Why, What, and Who?",
-                                                            img(id= "homeing", src="https://inspirecommunityoutreach.ca/wp-content/uploads/2022/02/inspire-adhd.jpg", style = "width: 70%; height= 70% ; padding: 0;"),
-                                                            column(10,
-                                                                   class="homeing",
-                                                                   h2("What do the numbers say?"),
-                                                                   br(),
-                                                                   h4(" In this section we are looking at data from the CDC's National Survey of the Diagnosis and Treatment of ADHD and Tourette Syndrome (NS-DATA) to derive some insigntful visuals to help you better understand ADHD in children in the US."),
-                                                                   br(),
-                                                                   HTML("<p>If you would like to check the survey data, please go to <a href='https://www.cdc.gov/nchs/slaits/ns_data.htm'> this CDC link</a>!</p>"),
-                                                                   br(),
-                                                                   h4("Presented charts reflect responses from the survey data about children aged 2 to 15 years old in 2011-2012 who had ever been diagnosed with attention-deficit/hyperactivity disorder (ADHD)."),
-                                                                   br(),
-                                                                   h4("The survey is based on a national sampling of around 3,000 respondent parent of caregiver of a child with ADHD."),
-                                                                   br()
-                                                              )
-                                                            ),
-                                                tabPanel("Diagnosis",
-                                                          fluidPage(
-                                                              mainPanel(
-                                                                highchartOutput("plotgraph1", height="500px")
-                                                                #splitLayout(cellWidths = c("50%", "50%"), highchartOutput("plotgraph1", height="500px"), plotOutput("plotgraph2"))
-                                                                #splitLayout(cellWidths = c("50%", "50%"), plotOutput("plotgraph1"), plotOutput("plotgraph2"))
-                                                                        #column(8, plotOutput("plotgraph1")),
-                                                                        #column(8, plotOutput("plotgraph2"))
-                                                                      )
-                                                            #plotOutput("plotgraph1"), plotOutput("plotgraph2")
-                                                                #splitLayout(cellWidths = c("50%", "50%"), plotOutput("plotgraph1"), plotOutput("plotgraph2"))
-                                                            )
-                                                        ),
-                                                tabPanel("Age",
-                                                         fluidPage(
-                                                           mainPanel(
-                                                             plotOutput("plotgraph2")
-                                                            )
-                                                           )
-                                                        #  sidebarLayout(
-                                                        #    sidebarPanel(
-                                                        #      selectInput("state_in", "State?", choices = unique(nsdata_adhd_puf_u$ADHD_A1_4), selected = "1", multiple = TRUE),
-                                                        #      checkboxInput("facetcounty", "Facet by County?"),
-                                                        #      varSelectInput("EDAx", "Variable", data = nsdata_adhd_puf_u, selected = "ADHD_A1_4"),
-                                                        #      numericInput("nullVal", "Please Enter a Positive Integer", value = 0)
-                                                        #    ),
-                                                        #    mainPanel(
-                                                        #      plotOutput("distPlot"),
-                                                        #      verbatimTextOutput("t_test"),
-                                                        #      verbatimTextOutput("noNull"))
-                                                        #    )
-                                                        ),
-                                                tabPanel("Medication Status",
-                                                         fluidPage(
-                                                           mainPanel(
-                                                             highchartOutput("plotgraph3")
-                                                           )
-                                                         )
-                                                          #sidebarLayout(
-                                                          #  sidebarPanel(
-                                                          #    selectInput("state_in", "State?", choices = unique(nsdata_adhd_puf_u$ADHD_A1_4), selected = "1", multiple = TRUE),
-                                                          #    checkboxInput("facetcounty", "Facet by County?"),
-                                                          #    varSelectInput("EDAx", "Variable", data = nsdata_adhd_puf_u, selected = "ADHD_A1_4"),
-                                                          #    numericInput("nullVal", "Please Enter a Positive Integer", value = 0)
-                                                          #  ),
-                                                          #  mainPanel(
-                                                          #    plotOutput("distPlot"),
-                                                          #    verbatimTextOutput("t_test"),
-                                                          #    verbatimTextOutput("noNull"))
-                                                          #)
-                                                        ),
-                                                tabPanel("Impact",
-                                                         fluidPage(
-                                                           mainPanel(
-                                                             highchartOutput("plotgraph4")
-                                                           )
-                                                         )
-                                                          #sidebarLayout(
-                                                          #  sidebarPanel(
-                                                          #    selectInput("state_in", "State?", choices = unique(nsdata_adhd_puf_u$ADHD_A1_4), selected = "1", multiple = TRUE),
-                                                          #    checkboxInput("facetcounty", "Facet by County?"),
-                                                          #    varSelectInput("EDAx", "Variable", data = nsdata_adhd_puf_u, selected = "ADHD_A1_4"),
-                                                          #    numericInput("nullVal", "Please Enter a Positive Integer", value = 0)
-                                                          #  ),
-                                                          #  mainPanel(
-                                                          #    plotOutput("distPlot"),
-                                                          #    verbatimTextOutput("t_test"),
-                                                          #    verbatimTextOutput("noNull"))
-                                                          #)
-                                                        #)
-                                                    #)
-                                               )
+                                       tabsetPanel(
+                                         tabPanel(title = "Why, What, and Who?",
+                                                  img(id= "homeing", src="https://inspirecommunityoutreach.ca/wp-content/uploads/2022/02/inspire-adhd.jpg", style = "width: 70%; height= 70% ; padding: 0;"),
+                                                  column(10,
+                                                         class="homeing",
+                                                         h2("What do the numbers say?"),
+                                                         br(),
+                                                         h4(" In this section we are looking at data from the CDC's National Survey of the Diagnosis and Treatment of ADHD and Tourette Syndrome (NS-DATA) to derive some insigntful visuals to help you better understand ADHD in children in the US."),
+                                                         br(),
+                                                         HTML("<p>If you would like to check the survey data, please go to <a href='https://www.cdc.gov/nchs/slaits/ns_data.htm'> this CDC link</a>!</p>"),
+                                                         br(),
+                                                         h4("Presented charts reflect responses from the survey data about children aged 2 to 15 years old in 2011-2012 who had ever been diagnosed with attention-deficit/hyperactivity disorder (ADHD)."),
+                                                         br(),
+                                                         h4("The survey is based on a national sampling of around 3,000 respondent parent of caregiver of a child with ADHD."),
+                                                         br()
+                                                  )
+                                         ),
+                                         tabPanel("Diagnosis",
+                                                  fluidPage(
+                                                    mainPanel(
+                                                      highchartOutput("plotgraph1", height="500px")
+                                                      #splitLayout(cellWidths = c("50%", "50%"), highchartOutput("plotgraph1", height="500px"), plotOutput("plotgraph2"))
+                                                      #splitLayout(cellWidths = c("50%", "50%"), plotOutput("plotgraph1"), plotOutput("plotgraph2"))
+                                                      #column(8, plotOutput("plotgraph1")),
+                                                      #column(8, plotOutput("plotgraph2"))
+                                                    )
+                                                    #plotOutput("plotgraph1"), plotOutput("plotgraph2")
+                                                    #splitLayout(cellWidths = c("50%", "50%"), plotOutput("plotgraph1"), plotOutput("plotgraph2"))
+                                                  )
+                                         ),
+                                         tabPanel("Age",
+                                                  fluidPage(
+                                                    mainPanel(
+                                                      plotOutput("plotgraph2")
+                                                    )
+                                                  )
+                                                  #  sidebarLayout(
+                                                  #    sidebarPanel(
+                                                  #      selectInput("state_in", "State?", choices = unique(nsdata_adhd_puf_u$ADHD_A1_4), selected = "1", multiple = TRUE),
+                                                  #      checkboxInput("facetcounty", "Facet by County?"),
+                                                  #      varSelectInput("EDAx", "Variable", data = nsdata_adhd_puf_u, selected = "ADHD_A1_4"),
+                                                  #      numericInput("nullVal", "Please Enter a Positive Integer", value = 0)
+                                                  #    ),
+                                                  #    mainPanel(
+                                                  #      plotOutput("distPlot"),
+                                                  #      verbatimTextOutput("t_test"),
+                                                  #      verbatimTextOutput("noNull"))
+                                                  #    )
+                                         ),
+                                         tabPanel("Medication Status",
+                                                  fluidPage(
+                                                    mainPanel(
+                                                      highchartOutput("plotgraph3")
+                                                    )
+                                                  )
+                                                  #sidebarLayout(
+                                                  #  sidebarPanel(
+                                                  #    selectInput("state_in", "State?", choices = unique(nsdata_adhd_puf_u$ADHD_A1_4), selected = "1", multiple = TRUE),
+                                                  #    checkboxInput("facetcounty", "Facet by County?"),
+                                                  #    varSelectInput("EDAx", "Variable", data = nsdata_adhd_puf_u, selected = "ADHD_A1_4"),
+                                                  #    numericInput("nullVal", "Please Enter a Positive Integer", value = 0)
+                                                  #  ),
+                                                  #  mainPanel(
+                                                  #    plotOutput("distPlot"),
+                                                  #    verbatimTextOutput("t_test"),
+                                                  #    verbatimTextOutput("noNull"))
+                                                  #)
+                                         ),
+                                         tabPanel("Impact",
+                                                  fluidPage(
+                                                    mainPanel(
+                                                      highchartOutput("plotgraph4")
+                                                    )
+                                                  )
+                                                  #sidebarLayout(
+                                                  #  sidebarPanel(
+                                                  #    selectInput("state_in", "State?", choices = unique(nsdata_adhd_puf_u$ADHD_A1_4), selected = "1", multiple = TRUE),
+                                                  #    checkboxInput("facetcounty", "Facet by County?"),
+                                                  #    varSelectInput("EDAx", "Variable", data = nsdata_adhd_puf_u, selected = "ADHD_A1_4"),
+                                                  #    numericInput("nullVal", "Please Enter a Positive Integer", value = 0)
+                                                  #  ),
+                                                  #  mainPanel(
+                                                  #    plotOutput("distPlot"),
+                                                  #    verbatimTextOutput("t_test"),
+                                                  #    verbatimTextOutput("noNull"))
+                                                  #)
+                                                  #)
+                                                  #)
+                                         )
+                                       )
                                      )
-                                     )
-                                     ),
+                            ),
                             
                             # Tab 4
                             tabPanel("Resources", value = 4
@@ -237,7 +237,8 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                    selectInput("UserInput",  # This is the name of the variable the User Input will be saved to
                                                "1.	In the last two weeks, have you witnessed the following child’s behavior?", #This is what will be displayed for the user
                                                choices = c("","Fearful", "Difficulty sustaining attention", "Restless","None of these")), # the preset choices
-                                   h4(textOutput("Result")) # h4 is text size again; here will be the Output send to 
+                                   h4(textOutput("Result")),
+                                   htmlOutput("questions")# h4 is text size again; here will be the Output send to 
                   ),
                   # conditionalPanel(condition = "input.tabselected==3"
                   # ),
@@ -263,11 +264,23 @@ server <- function(input, output) {
   
   # Survey Tab
   output$explanation <- renderText({
-    paste("<h4>This tool will help you identify some potential conditions the
-           child may be experiencing. Select the answer that best describes your
-           observations</h4>", "",
-          "<h5>*Please note the results identified in this survey are not a diagnosis
-          and a professional consultation is encouraged.*</h5>", "")#h2 comes form html style and simply is determining basically the text size")
+    paste("<h5>Below is a sample survey that clinicians can commonly use to 
+    assist in identifying behaviors associated with ADHD or PTSD. There may also
+    be cases where children are experiencing an overlap of both conditions. The 
+    survey is designed to provide insight into which treatment is most appropriate
+    for their diagnosis.</h5></br>", "",
+          
+          "<h5>Understanding these behaviours can help professionals address them in a 
+          way that would benefit the child and enhance their learning. Further 
+          resources are available in the links below to gain a deeper understanding
+          of each of these conditions.</h5></br>", "",
+          "<h6>*Please note the results identified in this survey are not a diagnosis
+          and a professional consultation is encouraged.*</h6>", "")#h2 comes form html style and simply is determining basically the text size")
+  })
+  
+  output$questions <- renderText({
+    paste("<h5><a href='https://www.health.vic.gov.au/practice-and-service-quality/trauma-and-abuse-asking-questions'>Trauma-Informed Care Questions</a></br></h5>",
+          "<h5><a href='https://www.healthline.com/health/adhd#symptoms'>Understanding ADHD</a></br></h5></br>")
   })
   
   Identifier =function(q.c){  # Your function (could be also set outside of shiny body)
