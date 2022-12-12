@@ -230,7 +230,7 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                          br(),
                                                          h4("3 million reports are made to the US Child Protection Services (USCPS) each year involving 5.5 million children. There is proof of abuse in about 30% of those cases each year."),
                                                          br(),
-                                                         HTML("<p>Presented chart under Abuse tab reflects how often different types of child abuse occur in USCPS with proof of abuse documented cases. The chart under Victimization presents the outcome of The National Survey of Children's Exposure to Violence that reports on 1 year and lifetime prevalence of childhood victimization in a nationally representative sample of 4549 minors from 2014. The report can be accessed <a href='https://www.ojp.gov/pdffiles1/ojjdp/grants/248444.pdf'> on this link </a>!</p>"),
+                                                         HTML("<p>Presented chart under Abuse tab reflects how often different types of child abuse occur in USCPS with proof of abuse documented cases. The chart under Victimization presents the outcome of The National Survey of Children's Exposure to Violence that reports on 1 year and lifetime prevalence of childhood victimization in a nationally representative sample of 4549 minors from 2014. The report can be accessed <a href='https://www.ojp.gov/pdffiles1/ojjdp/grants/248444.pdf'> on this link</a>!</p>"),
                                                          br()
                                                   )),
                                          tabPanel("Abuse",
