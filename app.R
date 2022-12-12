@@ -274,7 +274,8 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                    selectInput("UserInput",  # This is the name of the variable the User Input will be saved to
                                                "1.	In the last two weeks, have you witnessed the following child’s behavior?", #This is what will be displayed for the user
                                                choices = c("","Fearful", "Difficulty sustaining attention", "Restless","None of these")), # the preset choices
-                                   h4(textOutput("Result")) # h4 is text size again; here will be the Output send to 
+                                   h4(textOutput("Result")),
+                                   htmlOutput("questions")# h4 is text size again; here will be the Output send to 
                   ),
                   # conditionalPanel(condition = "input.tabselected==3"
                   # ),
@@ -300,11 +301,23 @@ server <- function(input, output) {
   
   # Survey Tab
   output$explanation <- renderText({
-    paste("<h4>This tool will help you identify some potential conditions the
-           child may be experiencing. Select the answer that best describes your
-           observations</h4>", "",
-          "<h5>*Please note the results identified in this survey are not a diagnosis
-          and a professional consultation is encouraged.*</h5>", "")#h2 comes form html style and simply is determining basically the text size")
+    paste("<h5>Below is a sample survey that clinicians can commonly use to 
+    assist in identifying behaviors associated with ADHD or PTSD. There may also
+    be cases where children are experiencing an overlap of both conditions. The 
+    survey is designed to provide insight into which treatment is most appropriate
+    for their diagnosis.</h5></br>", "",
+          
+          "<h5>Understanding these behaviours can help professionals address them in a 
+          way that would benefit the child and enhance their learning. Further 
+          resources are available in the links below to gain a deeper understanding
+          of each of these conditions.</h5></br>", "",
+          "<h6>*Please note the results identified in this survey are not a diagnosis
+          and a professional consultation is encouraged.*</h6>", "")#h2 comes form html style and simply is determining basically the text size")
+  })
+  
+  output$questions <- renderText({
+    paste("<h5><a href='https://www.health.vic.gov.au/practice-and-service-quality/trauma-and-abuse-asking-questions'>Trauma-Informed Care Questions</a></br></h5>",
+          "<h5><a href='https://www.healthline.com/health/adhd#symptoms'>Understanding ADHD</a></br></h5></br>")
   })
   
   Identifier =function(q.c){  # Your function (could be also set outside of shiny body)
