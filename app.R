@@ -39,7 +39,7 @@ hc <- df %>%
     "pie", hcaes(x = name, y = y),
     name = "Responded") %>%
   hc_title(
-    text = "The First Person Concerned With The Child’s Behavior, Attention, or Performance Before ADHD Diagnosis.",
+    text = "The First Person Concerned With The Child’s Behavior, Attention, or Performance Before ADHD Diagnosis:",
     margin = 20,
     align = "left",
     style = list(color = "black", useHTML = TRUE))
@@ -54,13 +54,15 @@ Age_First_Concerned %>%
 p <- Age_First_Concerned %>%
   filter(Age_Concerned > 0) %>%
   ggplot( aes(x=Age_Concerned)) +
-  geom_histogram( binwidth=1, fill="#69b3a2", color="#e9ecef", alpha=0.9) +
+  geom_histogram(aes(y = after_stat(count / sum(count))), bins = 10, color="black", fill="lightblue") +
+  scale_y_continuous(labels = scales::percent) +
   xlab("Child's Age") +
-  ggtitle("Child's Age When The First Person Concerned With Their Behavior Was First Concerned") +
+  ylab("% of Total Population Surveyed") +
+  ggtitle("Children's Age When Their Behavior Was First Concerning") +
   theme_ipsum() +
   theme(plot.title = element_text(size=15), 
         text=element_text(color="black"), 
-        axis.text=element_text(color="black")) 
+        axis.text=element_text(color="black"))
 
 
 df2 <- data.frame(
@@ -120,9 +122,10 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                             
                             # Tab 3
                             tabPanel("Visualizations", value = 3,
-                                     fluidPage(
-                                               tabsetPanel(
-                                                tabPanel(title = "Why, What, and Who?",
+                                     tabsetPanel(
+                                       tabPanel("ADHD",
+                                          tabsetPanel(
+                                                tabPanel(title = "An Understanding",
                                                             img(id= "homeing", src="https://inspirecommunityoutreach.ca/wp-content/uploads/2022/02/inspire-adhd.jpg", style = "width: 70%; height= 70% ; padding: 0;"),
                                                             column(10,
                                                                    class="homeing",
@@ -136,8 +139,7 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                                    br(),
                                                                    h4("The survey is based on a national sampling of around 3,000 respondent parent of caregiver of a child with ADHD."),
                                                                    br()
-                                                              )
-                                                            ),
+                                                              )),
                                                 tabPanel("Diagnosis",
                                                           fluidPage(
                                                               mainPanel(
@@ -157,6 +159,7 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                              plotOutput("plotgraph2")
                                                             )
                                                            )
+                                                        ),
                                                         #  sidebarLayout(
                                                         #    sidebarPanel(
                                                         #      selectInput("state_in", "State?", choices = unique(nsdata_adhd_puf_u$ADHD_A1_4), selected = "1", multiple = TRUE),
@@ -169,13 +172,13 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                         #      verbatimTextOutput("t_test"),
                                                         #      verbatimTextOutput("noNull"))
                                                         #    )
-                                                        ),
                                                 tabPanel("Medication Status",
                                                          fluidPage(
                                                            mainPanel(
                                                              highchartOutput("plotgraph3")
                                                            )
                                                          )
+                                                      ),
                                                           #sidebarLayout(
                                                           #  sidebarPanel(
                                                           #    selectInput("state_in", "State?", choices = unique(nsdata_adhd_puf_u$ADHD_A1_4), selected = "1", multiple = TRUE),
@@ -188,13 +191,13 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                           #    verbatimTextOutput("t_test"),
                                                           #    verbatimTextOutput("noNull"))
                                                           #)
-                                                        ),
                                                 tabPanel("Impact",
                                                          fluidPage(
                                                            mainPanel(
                                                              highchartOutput("plotgraph4")
                                                            )
                                                          )
+                                                        )
                                                           #sidebarLayout(
                                                           #  sidebarPanel(
                                                           #    selectInput("state_in", "State?", choices = unique(nsdata_adhd_puf_u$ADHD_A1_4), selected = "1", multiple = TRUE),
@@ -209,10 +212,44 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                                                           #)
                                                         #)
                                                     #)
-                                               )
-                                     )
+                                               
                                      )
                                      ),
+                                     tabPanel("Trauma",
+                                       tabsetPanel(
+                                         tabPanel(title = "An Understanding",
+                                                  img(id= "homeing", src="http://nestcac.org/wp-content/uploads/2019/01/xSad-Child-Dealing-with-Trauma.jpg.pagespeed.ic.kJTAVHxYea.jpg", style = "width: 70%; height= 70% ; padding: 0;"),
+                                                  column(10,
+                                                         class="homeing",
+                                                         h2("What is child trauma?"),
+                                                         br(),
+                                                         h4("According to The National Child Traumatic Stress Network (NCTSN), trauma occurs when a child experiences an intense event that threatens or causes harm to his or her emotional and physical well-being. Child abuse is the leading cause of child trauma."),
+                                                         br(),
+                                                         HTML("<p>If you would like to check NCTSN work, please <a href='https://www.nctsn.org/what-is-child-trauma/trauma-types'> click here</a>!</p>"),
+                                                         br(),
+                                                         h4("3 million reports are made to the US Child Protection Services (USCPS) each year involving 5.5 million children. There is proof of abuse in about 30% of those cases each year."),
+                                                         br(),
+                                                         HTML("<p>Presented chart under Abuse tab reflects how often different types of child abuse occur in USCPS with proof of abuse documented cases. The chart under Victimization presents the outcome of The National Survey of Children's Exposure to Violence that reports on 1 year and lifetime prevalence of childhood victimization in a nationally representative sample of 4549 minors from 2014. The report can be accessed <a href='https://www.ojp.gov/pdffiles1/ojjdp/grants/248444.pdf'> on this link </a>!</p>"),
+                                                         br()
+                                                  )),
+                                         tabPanel("Abuse",
+                                                  fluidPage(
+                                                    mainPanel(
+                                                      highchartOutput("plotgraph5", height="500px")
+                                                      )
+                                                  )
+                                                ),
+                                         tabPanel("Victimization",
+                                                  fluidPage(
+                                                    mainPanel(
+                                                      highchartOutput("plotgraph6", height="500px")
+                                                    )
+                                                  )
+                                         )
+                                              )
+                                          )
+                                     )
+                            ),
                             
                             # Tab 4
                             tabPanel("Resources", value = 4
@@ -300,10 +337,10 @@ server <- function(input, output) {
         "pie", hcaes(x = name, y = y),
         name = "Responded") %>%
       hc_title(
-        text = "The First Person Concerned With The Child’s Behavior, Attention, or Performance Before ADHD Diagnosis.",
+        text = "The First Person to Notice the Child's ADHD Before Official Diagnosis:",
         margin = 20,
         align = "left",
-        style = list(color = "white", useHTML = TRUE))
+        style = list(color = "black", useHTML = TRUE))
     
     hchart(diamonds$carat)
     hc
@@ -313,11 +350,10 @@ server <- function(input, output) {
   
   output$plotgraph3 <- renderHighchart({
     df2 <- data.frame(
-      x1 = c(1, 2, 3, 4, 5, 6),
-      y1 = c(1752, 549, 189, 5, 383, 88),
-      name = as.factor(c("Has ADHD & Taking ADHD Med", "Has ADHD & Not Taking ADHD Med", 
-                         "Has ADHD & Never Taken ADHD Med", "Has ADHD & Med Unknown",
-                         "Does Not Currently Have ADHD", "Current ADHD Status Unknown"))
+      x1 = c(1, 2, 3, 4),
+      y1 = c(1752, 549, 189, 5),
+      name = as.factor(c("Taking ADHD Med", "Not Taking ADHD Med", 
+                         "Never Taken ADHD Med", "Med Unknown"))
     )
     
     hc2 <- df2 %>%
@@ -325,10 +361,9 @@ server <- function(input, output) {
         "pie", hcaes(x = name, y = y1),
         name = "Responded") %>%
       hc_title(
-        text = "ADHD Condition and Medication Status",
-        margin = 20,
+        text = "Medication Status of Children Currently with ADHD:",
         align = "left",
-        style = list(color = "white", useHTML = TRUE))
+        style = list(color = "black", useHTML = TRUE))
     hc2
   })
   
@@ -338,7 +373,7 @@ server <- function(input, output) {
       y2 = c(633, 640, 853, 514, 247, 79),
       name = as.factor(c("Problematic", "Somewhat Problematic", 
                          "Average", "Above Average",
-                         "Excellent", "Don't Know or Refused"))
+                         "Excellent", "Refused to Answer"))
     )
     
     hc3 <- df3 %>%
@@ -346,11 +381,50 @@ server <- function(input, output) {
         "pie", hcaes(x = name, y = y2),
         name = "Responded") %>%
       hc_title(
-        text = " ADHD and School Performance",
+        text = "Academic Performance of Children Diagnosed with ADHD:",
         margin = 20,
         align = "left",
-        style = list(color = "white", useHTML = TRUE))
+        style = list(color = "black", useHTML = TRUE))
     hc3
+  })
+  
+  output$plotgraph5 <- renderHighchart({
+    df5 <- data.frame(
+      x2 = c(1, 2, 3, 4),
+      y2 = c(65, 18, 10, 7),
+      name = as.factor(c("Neglect", "Physical Abuse", 
+                         "Sexual Abuse", "Psychological (mental) Abuse"))
+    )
+    
+    hc5 <- df5 %>%
+      hchart(
+        "pie", hcaes(x = name, y = y2),
+        name = "Percentage") %>%
+      hc_title(
+        text = "Type of Child Abuse in USCPS Reports With Documented Proof:",
+        margin = 20,
+        align = "left",
+        style = list(color = "black", useHTML = TRUE))
+    hc5
+  })
+  
+  output$plotgraph6 <- renderHighchart({
+    df6 <- data.frame(
+      x2 = c(1, 2),
+      y2 = c(60.6, 39.4),
+      name = as.factor(c("Yes", "No"))
+    )
+    
+    hc6 <- df6 %>%
+      hchart(
+        "pie", hcaes(x = name, y = y2),
+        name = "Percentage") %>%
+      hc_title(
+        text = "Asked if experienced or witnessed victimization in the past year, a nationally representative sample of minors answered:",
+        margin = 20,
+        align = "left",
+        style = list(color = "black", useHTML = TRUE))
+    hc6
   })
   
   # Resources tab
