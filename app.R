@@ -59,7 +59,7 @@ p <- Age_First_Concerned %>%
   scale_y_continuous(labels = scales::percent) +
   xlab("Child's Age") +
   ylab("% of Total Population Surveyed") +
-  ggtitle("Children's Age When Their Behavior Was First Concerning") +
+  ggtitle("Children's Age When Their Behavior Was First Concerning:") +
   theme_ipsum() +
   theme(plot.title = element_text(size=15), 
         text=element_text(color="black"), 
